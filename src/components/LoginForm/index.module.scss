@@ -1,0 +1,37 @@
+.loginForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    fieldset {
+        padding: 1em 2em;
+
+        legend {
+            padding-left: 0.5em;
+            padding-right: 0.5em;
+        }
+        
+        .inputField {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+    
+            input {
+                margin-left: 1em;
+                padding: 0.5em;
+            }
+        }
+    
+        .buttonField {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;            
+        }
+    }
+
+}
+
+.toggleForm {
+    margin-top: 1em;
+
+}
