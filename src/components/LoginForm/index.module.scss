@@ -2,6 +2,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+
+    .errorMessage {
+        position: absolute;
+        right: 5px;
+        top: -40px;
+        font-size: 0.9em;
+        color: rgb(180, 19, 19);
+    }
 
     fieldset {
         padding: 1em 2em;
@@ -33,5 +42,20 @@
 
 .toggleForm {
     margin-top: 1em;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 
+    p {
+        margin-right: 1em;
+        font-size: 0.8rem;
+    }
+    .sign {
+        font-size: 0.8rem;
+        color: blue;
+        
+        &:hover {
+            cursor: pointer;
+        }
+    }
 }
