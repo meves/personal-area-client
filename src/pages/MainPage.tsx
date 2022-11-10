@@ -1,12 +1,12 @@
 import React from "react";
 import { Navbar } from "../components/Navbar.tsx";
-import { UserList } from "../components/UserList";
+import { Users } from "../components/Users";
 
 const MainPage = () => {
     return (
         <div className="container">
             <Navbar/>
-            <UserList/>
+            <Users/>
         </div>
     );
 }

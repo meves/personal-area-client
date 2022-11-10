@@ -1,5 +1,10 @@
-export type AuthErrorMessage = { message: string }
-export type AuthToken = { token: string }
+export type ErrorMessage = { 
+    message: string 
+}
+
+export type AuthToken = { 
+    token: string 
+}
 
 export type UserFromList = {
     id: number
@@ -12,3 +17,4 @@ export type UserFromList = {
 export type DataWithUsers = {
     users: UserFromList[]
 }
+

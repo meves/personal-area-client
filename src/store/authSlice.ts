@@ -3,7 +3,7 @@ import { AppDispatch, RootState } from "."
 import { authRequests } from "../http/auth"
 import { HTTP_CODES } from "../http/codes"
 import jwt_decode from "jwt-decode";
-import { AuthErrorMessage, AuthToken } from "./types";
+import { ErrorMessage, AuthToken } from "./types";
 
 
 // initialState type
@@ -51,7 +51,7 @@ export const auth = () => async (dispatch: AppDispatch) => {
     const token: string | null = localStorage.getItem("token");
     const response = await authRequests.auth(token);
     if (response.status === HTTP_CODES.UNAUTHORIZED_401) {
-        const { message }: AuthErrorMessage = await response.json();
+        const { message }: ErrorMessage = await response.json();
         await resultSigning(false, "", null, message, dispatch);
         return;
     }
@@ -66,7 +66,7 @@ export const auth = () => async (dispatch: AppDispatch) => {
 export const signup = (email: string, password: string) => async (dispatch: AppDispatch) => {
     const response = await authRequests.signup(email, password);
     if (response.status === HTTP_CODES.BAD_REQUEST_400) {
-        const { message }: AuthErrorMessage = await response.json();
+        const { message }: ErrorMessage = await response.json();
         await resultSigning(false, "", null, message, dispatch);
         return;
     }
