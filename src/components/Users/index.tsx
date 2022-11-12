@@ -9,29 +9,71 @@ type InputUserData = {
     lastname: string;
 }
 
+type UserSearchData = {
+    firstname: string
+    lastname: string
+}
+
 // Users ---------------------------------------------------------------------------------
 export const Users = () => {
-    /** state for controlled inputs */
+    
+    /** state for controlled inputs in UserForm */
     const [userData, setUserData] = useState<InputUserData>({ id: null, firstname: "", lastname: "" });
     
+    /** state for filtering users list */
+    const [userSearchData, setUserSearchData] = useState<UserSearchData>({ firstname: "", lastname: "" });
+
     return (
         <div className={styles.usersContainer}>
             Search user form
-            <SerachUserForm/>
+            <SearchUserForm userSearchData={userSearchData} setUserSearchData={setUserSearchData} />
             User form
             <UserForm userData={userData} setUserData={setUserData} />
             User List
-            <UserList setUserData={setUserData} />
+            <UserList setUserData={setUserData} userSearchData={userSearchData} />
         </div>
     )
 }
 
 // SearchUserForm ---------------------------------------------------------------------------------
-const SerachUserForm = () => {
+const SearchUserForm = ({
+    userSearchData,
+    setUserSearchData
+} : {
+    userSearchData: UserSearchData
+    setUserSearchData: React.Dispatch<React.SetStateAction<UserSearchData>>
+}) => {
+    /** local state for controlled fields */
+    const [inputUserSearchData, setInputUserSearchData] = useState<UserSearchData>({ firstname: "", lastname: "" });
+    /** handler for controlled fields */
+    const handleChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
+        const input = event.currentTarget;
+        setInputUserSearchData((prevUserSearchData) => ({ ...prevUserSearchData, [input.name]: input.value }));
+    }
+    /** pass user search data toLowerCase() parent component toLowerCase() filter them */
+    const passUserSearchData = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setUserSearchData(inputUserSearchData);
+        setInputUserSearchData({ firstname: "", lastname: "" });
+    }
+
     return (
-        <form>
-            <input type="text" name="username" />
-            <button>Search</button>
+        <form onSubmit={passUserSearchData}>
+            <input
+                value={inputUserSearchData.firstname}
+                onChange={handleChangeInput}
+                type="text" 
+                name="firstname" 
+                placeholder="first name" 
+            />
+            <input 
+                value={inputUserSearchData.lastname}
+                onChange={handleChangeInput}
+                type="text" 
+                name="lastname" 
+                placeholder="last name" 
+            />
+            <button type="submit">Search</button>
         </form>
     )
 }
@@ -76,14 +118,14 @@ const UserForm = ({
                 onChange={handleInputOfUserName}
                 type="text" 
                 name="firstname" 
-                placeholder="firstname"
+                placeholder="first name"
             />
             <input 
                 value={userData.lastname}
                 onChange={handleInputOfUserName}
                 type="text" 
                 name="lastname" 
-                placeholder="lastname" 
+                placeholder="last name" 
             />
             <button
                 type="submit"
@@ -100,8 +142,10 @@ const UserForm = ({
 
 // UserList ---------------------------------------------------------------------------------
 const UserList = ({
+    userSearchData,
     setUserData
 } : {
+    userSearchData: UserSearchData
     setUserData: React.Dispatch<React.SetStateAction<InputUserData>>
 }) => {
     const users = useAppSelector(selectUsers);
@@ -115,14 +159,23 @@ const UserList = ({
     const handleDeleteUsers = (event: MouseEvent | TouchEvent, id: number) => {
         dispatch(deleteUserThunk(id));
     }
-    /** send user data to Users to local state */
+    /** send user data toLowerCase() Users toLowerCase() local state */
     const sendUserDataToLocalState = (id: number, firstname: string, lastname: string) => {
         setUserData({id, firstname, lastname});
     }
 
     return (
         <ul>
-            {users.map((user) => (
+            {users
+            .filter(user => {                
+                return (userSearchData.firstname === "" || 
+                    user.firstname.toLowerCase().includes(userSearchData.firstname.toLowerCase())
+                ) &&
+                (userSearchData.lastname === "" || 
+                    user.lastname.toLowerCase().includes(userSearchData.lastname.toLowerCase())
+                )             
+            })
+            .map((user) => (
                 <li key={user.id}>
                     <span>{user.firstname}</span> <span>{user.lastname}</span>
                     <button
