@@ -1,3 +1,23 @@
 :root {
-    --button-color: rgb(23, 94, 156);
+    --white-color: hsl(0, 0%, 100%);
+    --blue-color: hsl(240, 100%, 50%);
+
+    /** font */
+    --error-font-color: hsl(0, 81%, 39%);
+    --link-font-color: var(--blue-color);
+    --button-font-color: hsla(0, 88%, 3%, 0.793);
+    --footer-font-color: var(--white-color);
+    
+    /** elements */
+    --button-color: hsl(208, 74%, 35%);
+    --border-form-color: hsl(240, 50%, 50%);
+    
+    /** bg */
+    --input-bg-color: hsl(210, 50%, 50%);
+    --login-page-bg-color: hsl(180, 70%, 70%);
+    --main-page-bg-color: hsl(213, 34%, 64%);
+    --navbar-bg-color: hsl(223, 58%, 48%);
+    --form-bg-color: hsla(208, 85%, 35%, 0.644);
+    --list-bg-color: hsla(208, 85%, 35%, 0.644);
+    --footer-bg-color: var(--blue-color);
 }

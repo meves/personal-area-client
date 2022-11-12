@@ -9,11 +9,13 @@
         right: 5px;
         top: -40px;
         font-size: 0.9em;
-        color: rgb(180, 19, 19);
+        color: var(--error-font-color);
     }
 
     fieldset {
         padding: 1em 2em;
+        border: 3px solid var(--border-form-color);
+        border-radius: 0.2em;
 
         legend {
             padding-left: 0.5em;
@@ -28,6 +30,7 @@
             input {
                 margin-left: 1em;
                 padding: 0.5em;
+                background-color: var(--input-bg-color);
             }
         }
     
@@ -52,7 +55,7 @@
     }
     .sign {
         font-size: 0.8rem;
-        color: blue;
+        color: var(--link-font-color);
         
         &:hover {
             cursor: pointer;

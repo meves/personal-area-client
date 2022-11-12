@@ -25,12 +25,31 @@ export const Users = () => {
 
     return (
         <div className={styles.usersContainer}>
-            Search user form
-            <SearchUserForm userSearchData={userSearchData} setUserSearchData={setUserSearchData} />
-            User form
-            <UserForm userData={userData} setUserData={setUserData} />
-            User List
-            <UserList setUserData={setUserData} userSearchData={userSearchData} />
+            <h2>User List application</h2>
+            <h4 
+                className={styles.formTitle}
+            >Search user by name
+            </h4>
+            <SearchUserForm 
+                userSearchData={userSearchData} 
+                setUserSearchData={setUserSearchData} 
+            />
+            <h4 
+                className={styles.formTitle}
+            >Add or update user
+            </h4>
+            <UserForm 
+                userData={userData} 
+                setUserData={setUserData} 
+            />
+            <h4 
+                className={styles.formTitle}
+            >User list
+            </h4>
+            <UserList 
+                setUserData={setUserData} 
+                userSearchData={userSearchData} 
+            />
         </div>
     )
 }
@@ -58,8 +77,12 @@ const SearchUserForm = ({
     }
 
     return (
-        <form onSubmit={passUserSearchData}>
+        <form 
+            className={styles.form} 
+            onSubmit={passUserSearchData}
+        >
             <input
+                className={styles.input}
                 value={inputUserSearchData.firstname}
                 onChange={handleChangeInput}
                 type="text" 
@@ -67,13 +90,18 @@ const SearchUserForm = ({
                 placeholder="first name" 
             />
             <input 
+                className={styles.input}
                 value={inputUserSearchData.lastname}
                 onChange={handleChangeInput}
                 type="text" 
                 name="lastname" 
                 placeholder="last name" 
             />
-            <button type="submit">Search</button>
+            <button 
+                className={styles.button}
+                type="submit"
+            >Search
+            </button>
         </form>
     )
 }
@@ -112,8 +140,12 @@ const UserForm = ({
     }
 
     return (
-        <form onSubmit={handleSendOfForm}>
+        <form 
+            className={styles.form} 
+            onSubmit={handleSendOfForm}
+        >
             <input 
+                className={styles.input}
                 value={userData.firstname}
                 onChange={handleInputOfUserName}
                 type="text" 
@@ -121,6 +153,7 @@ const UserForm = ({
                 placeholder="first name"
             />
             <input 
+                className={styles.input}
                 value={userData.lastname}
                 onChange={handleInputOfUserName}
                 type="text" 
@@ -128,11 +161,13 @@ const UserForm = ({
                 placeholder="last name" 
             />
             <button
+                className={styles.button}
                 type="submit"
             >Send
             </button>
             {userData.id !== null &&
                 <button
+                    className={`${styles.cancel} ${styles.button}`}
                     onClick={cancelUpdateSelectedUser}
                 >Cancel</button>
             }
@@ -165,7 +200,7 @@ const UserList = ({
     }
 
     return (
-        <ul>
+        <ul className={`flexDirectionColumn ${styles.list}`}>
             {users
             .filter(user => {                
                 return (userSearchData.firstname === "" || 
@@ -176,12 +211,24 @@ const UserList = ({
                 )             
             })
             .map((user) => (
-                <li key={user.id}>
-                    <span>{user.firstname}</span> <span>{user.lastname}</span>
+                <li 
+                    className={styles.item}
+                    key={user.id}
+                >
+                    <span
+                        className={styles.name}    
+                    >{user.firstname}
+                    </span> 
+                    <span
+                        className={styles.name}
+                    >{user.lastname}
+                    </span>
                     <button
+                        className={styles.button}
                         onClick={() => sendUserDataToLocalState(user.id, user.firstname, user.lastname)}
                     >edit</button>
                     <button
+                        className={styles.button}
                         onClick={(event) => handleDeleteUsers(event, user.id)}
                     >delete</button>
                 </li>

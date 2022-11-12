@@ -4,7 +4,7 @@
     justify-content: flex-end;
     align-items: center;
     padding: 1em 0.75em;
-    background-color: rgb(60, 169, 20);
+    background-color: var(--navbar-bg-color);
     font-size: 0.65rem;
 
     .logo {
@@ -28,7 +28,7 @@
         
         &:hover {
             cursor: pointer;
-            color: blue;
+            color: var(--blue-color);
         }
     }
 }

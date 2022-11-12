@@ -1,15 +1,16 @@
+/* centered on the page and centers content inside by width */
+.container {
+    width: 80%;
+    text-align: center;
+    margin: 0 auto;
+}
+/* occupies the entire screen space and centers the content in width and height */
 .centeredContainer {
     width: 100%;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.container {
-    width: 80%;
-    text-align: center;
-    margin: 0 auto;
 }
 
 .flexDirectionColumn {
@@ -20,10 +21,10 @@
     border: none;
     border-radius: 0.2em;
     padding: 0.6em 1em;
-    color: white;
+    color: var(--white-color);
     background-color: var(--button-color);
 }
-
+/* animation for submit button */
 .submitButton {
     transition: transform 0.2s ease-in;
     

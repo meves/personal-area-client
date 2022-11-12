@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import { Preloader } from './components/common/Preloader';
-import { LoginForm } from './components/LoginForm';
+import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
-import { auth, selectAuth, selectUser } from './store/authSlice';
+import { auth, selectAuth } from './store/authSlice';
 
 function App() {
 
@@ -31,7 +31,7 @@ function App() {
         { isAuth ? 
           <Route path="/" element={<MainPage />} />
           :
-          <Route path="/" element={<LoginForm />} />          
+          <Route path="/" element={<LoginPage />} />          
         }
         <Route path="*" element={<div>Not found</div>} />
       </Routes>

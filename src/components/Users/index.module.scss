@@ -1,4 +1,71 @@
 .usersContainer {
     padding: 1em;
-    background-color: hsla(210, 80%, 80%, 0.8);
+    
+    .formTitle {
+        margin-top: 2em;
+        margin-bottom: 0.5em;
+    }
+
+    .form {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.55em 5em;
+        border-radius: 0.3em;
+        background-color: var(--form-bg-color);
+
+        .input {
+            margin-right: 0.5em;
+            padding: 0.3em 0.5em;
+            outline: none;
+            border: none;
+        }
+
+        .cancel {
+            margin-left: 0.5em;
+        }
+    }
+
+    .list {
+        list-style-type: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-left: 0;
+        background-color: var(--list-bg-color);
+
+        .item {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 0.3em 1em;
+
+            .name {
+                width: 15%;
+                text-align: start;
+            }
+
+            .button {
+                margin-left: 0.5em;
+            }
+        }
+    }
+}
+
+.button {
+    padding: 0.3em 0.5em;
+    border: none;
+    color: var(--button-font-color);
+    font-weight: 500;
+    text-transform: uppercase;
+    transition: transform 0.1s ease-in,
+        font-weight 0.1s ease-in;
+
+    &:hover {
+        cursor: pointer;
+        transform: scale(105%);
+        font-weight: 900;
+    }
 }
