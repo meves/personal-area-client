@@ -7,8 +7,7 @@ export const LoginForm = () => {
     // if error occured while signing, not empty string
     const errorMessage = useAppSelector(selectErrorMessage);
     
-    // if registered is null, then use local state
-    // else local state depends on global state
+    // used to switch register or login form 
     const [formType, setFormType] = useState<"signin" | "signup">("signup")
     
     // controlled inputs
