@@ -2,9 +2,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import { Preloader } from './components/common/Preloader';
+import GreetingPage from './pages/GreetingPage';
 import LoginPage from './pages/LoginPage';
-import MainPage from './pages/MainPage';
-import { auth, selectAuth } from './store/authSlice';
+import UsersPage from './pages/UsersPage';
+import { AuthThunk, selectAuth } from './store/authSlice';
 
 function App() {
 
@@ -15,7 +16,7 @@ function App() {
   const dispatch = useAppDispatch();
 
   const authorize = useCallback(async () => {
-      await dispatch(auth());
+      await dispatch(AuthThunk.auth());
       setLoading(false);
   }, [dispatch])
 
@@ -29,7 +30,10 @@ function App() {
     <div>
       <Routes>
         { isAuth ? 
-          <Route path="/" element={<MainPage />} />
+          <>
+          <Route path="/" element={<UsersPage />} />
+          <Route path="/greeting" element={<GreetingPage/>} />
+          </>
           :
           <Route path="/" element={<LoginPage />} />          
         }

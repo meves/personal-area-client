@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FormEvent, MouseEvent, TouchEvent, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { createUserThunk, deleteUserThunk, getUsersThunk, selectUsers, updateUserThunk } from '../../store/usersSlice';
+import { UserListThunk, selectUsers } from '../../store/usersSlice';
 import styles from './index.module.scss';
 
 type InputUserData = {
@@ -127,9 +127,9 @@ const UserForm = ({
     const handleSendOfForm = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (userData.id !== null) {
-            dispatch(updateUserThunk(userData.id, userData.firstname, userData.lastname));
+            dispatch(UserListThunk.updateUserThunk(userData.id, userData.firstname, userData.lastname));
         } else {
-            dispatch(createUserThunk(userData.firstname, userData.lastname));
+            dispatch(UserListThunk.createUserThunk(userData.firstname, userData.lastname));
         }
         cancelUpdateSelectedUser();
     }
@@ -188,11 +188,11 @@ const UserList = ({
     const dispatch = useAppDispatch();
     /** get all users when page loaded or users changed */
     useEffect(() => {
-        dispatch(getUsersThunk());
+        dispatch(UserListThunk.getUsersThunk());
     }, [dispatch])
     // delete chosen user by id
     const handleDeleteUsers = (event: MouseEvent | TouchEvent, id: number) => {
-        dispatch(deleteUserThunk(id));
+        dispatch(UserListThunk.deleteUserThunk(id));
     }
     /** send user data toLowerCase() Users toLowerCase() local state */
     const sendUserDataToLocalState = (id: number, firstname: string, lastname: string) => {

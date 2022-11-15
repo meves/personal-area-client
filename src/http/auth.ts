@@ -1,8 +1,8 @@
 import { baseUrl } from ".";
 
-export const authRequests = {
+export class AuthRequests {
     // /api/auth
-    auth: async function (token: string | null) {
+    static async auth(token: string | null) {
         const response = await fetch(`${baseUrl}auth`, {
             method: "GET",
             headers: {
@@ -10,18 +10,18 @@ export const authRequests = {
             }
         });
         return response;
-    },
+    }
     // /api/signup
-    signup: async function(email: string, password: string) {
+    static async signup(email: string, password: string) {
         const response = await fetch(`${baseUrl}signup`, {
             method: "POST",
             headers: { "Content-type": "application/json" },
             body: JSON.stringify({ email, password })
         });
         return response;
-    },
+    }
     // /api/signin
-    signin: async function(email: string, password: string) {
+    static async signin(email: string, password: string) {
         const response = await fetch(`${baseUrl}signin`, {
             method: "POST",
             headers: { "Content-type": "application/json" },

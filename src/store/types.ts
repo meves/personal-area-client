@@ -18,3 +18,11 @@ export type DataWithUsers = {
     users: UserFromList[]
 }
 
+export type DataGreeting = {
+    data: {
+        greeting: {
+            id: number
+            greeting: string
+        }
+    }
+}

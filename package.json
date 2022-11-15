@@ -51,6 +51,7 @@
     "@types/config": "^3.3.0",
     "@types/styled-components": "^5.1.26",
     "@types/uuid": "^8.3.4",
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "msw": "^0.48.2"
   }
 }

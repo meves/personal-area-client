@@ -1,4 +1,4 @@
-import { usersRequests } from './../http/users';
+import { UsersRequests } from './../http/users';
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AppDispatch, RootState } from "."
 import { HTTP_CODES } from '../http/codes';
@@ -52,81 +52,73 @@ export default usersSlice.reducer;
 export const selectUsers = (state: RootState): UserFromList[] => state.users.users;
 
 // thunks
-export const getUsersThunk = () => 
-    async (dispatch: AppDispatch) => {
-        const response = await usersRequests.getAllUsers();
-        if (response.status === HTTP_CODES.INTERNAL_SERVER_ERROR_500) {
-            const { message }: ErrorMessage = await response.json();
-            dispatch(setErrorMessageAction(message));
-            return;
+export class UserListThunk {
+    static getUsersThunk = () => 
+        async (dispatch: AppDispatch) => {
+            const response = await UsersRequests.getAllUsers();
+            if (response.status === HTTP_CODES.INTERNAL_SERVER_ERROR_500) {
+                const { message }: ErrorMessage = await response.json();
+                dispatch(setErrorMessageAction(message));
+                return;
+            }
+            if (response.status === HTTP_CODES.OK_200) {
+                const { users }: DataWithUsers = await response.json();
+                dispatch(setUsersAction(users));
+                return;
+            }
+        }    
+    static getUserThunk = (id: number) => 
+        async (dispatch: AppDispatch) => {
+            const response = await UsersRequests.getUser(id);
+            if (response.status === HTTP_CODES.INTERNAL_SERVER_ERROR_500) {
+                const { message }: ErrorMessage = await response.json();
+                dispatch(setErrorMessageAction(message));
+                return;
+            }
+            if (response.status === HTTP_CODES.OK_200) {
+                const { users }: DataWithUsers = await response.json();
+                dispatch(updateSeletedUserAction(users[0]));
+                return;
+            }
+        }    
+    static createUserThunk = (firstname: string, lastname: string) => 
+        async (dispatch: AppDispatch) => {
+            const response = await UsersRequests.createUser(firstname, lastname);
+            if (response.status === HTTP_CODES.INTERNAL_SERVER_ERROR_500) {
+                const { message }: ErrorMessage = await response.json();
+                dispatch(setErrorMessageAction(message));
+                return;
+            }
+            if (response.status === HTTP_CODES.CREATED_201) {
+                const { users }: DataWithUsers = await response.json();
+                dispatch(addCreatedUserAction(users));
+                return;
+            }
+        }    
+    static deleteUserThunk = (id: number) => 
+        async (dispatch: AppDispatch) => {
+            const response = await UsersRequests.deleteUser(id);
+            if (response.status === HTTP_CODES.INTERNAL_SERVER_ERROR_500) {
+                const { message }: ErrorMessage = await response.json();
+                dispatch(setErrorMessageAction(message));
+                return;
+            }
+            if (response.status === HTTP_CODES.NO_CONTENT_204) {
+                dispatch(deleteSelectedUserAction(id));
+                return;
+            }
+        }    
+    static updateUserThunk = (id: number, firstname: string, lastname: string) => 
+        async (dispatch: AppDispatch) => {
+            const response = await UsersRequests.updateUser(id, firstname, lastname);
+            if (response.status === HTTP_CODES.INTERNAL_SERVER_ERROR_500) {
+                const { message }: ErrorMessage = await response.json();
+                dispatch(setErrorMessageAction(message));
+                return;
+            }
+            if (response.status === HTTP_CODES.NO_CONTENT_204) {
+                dispatch(UserListThunk.getUserThunk(id));
+                return;
+            }
         }
-        if (response.status === HTTP_CODES.OK_200) {
-            const { users }: DataWithUsers = await response.json();
-            dispatch(setUsersAction(users));
-            return;
-        }
-    }
-
-export const getUserThunk = (id: number) => 
-    async (dispatch: AppDispatch) => {
-        const response = await usersRequests.getUser(id);
-        if (response.status === HTTP_CODES.INTERNAL_SERVER_ERROR_500) {
-            const { message }: ErrorMessage = await response.json();
-            dispatch(setErrorMessageAction(message));
-            return;
-        }
-        if (response.status === HTTP_CODES.OK_200) {
-            const { users }: DataWithUsers = await response.json();
-            dispatch(updateSeletedUserAction(users[0]));
-            return;
-        }
-    }
-
-export const createUserThunk = (firstname: string, lastname: string) => 
-    async (dispatch: AppDispatch) => {
-        const response = await usersRequests.createUser(firstname, lastname);
-        if (response.status === HTTP_CODES.INTERNAL_SERVER_ERROR_500) {
-            const { message }: ErrorMessage = await response.json();
-            dispatch(setErrorMessageAction(message));
-            return;
-        }
-        if (response.status === HTTP_CODES.CREATED_201) {
-            const { users }: DataWithUsers = await response.json();
-            dispatch(addCreatedUserAction(users));
-            return;
-        }
-    }
-
-export const deleteUserThunk = (id: number) => 
-    async (dispatch: AppDispatch) => {
-        const response = await usersRequests.deleteUser(id);
-        if (response.status === HTTP_CODES.INTERNAL_SERVER_ERROR_500) {
-            const { message }: ErrorMessage = await response.json();
-            dispatch(setErrorMessageAction(message));
-            return;
-        }
-        if (response.status === HTTP_CODES.NO_CONTENT_204) {
-            dispatch(deleteSelectedUserAction(id));
-            return;
-        }
-    }
-
-export const updateUserThunk = (id: number, firstname: string, lastname: string) => 
-    async (dispatch: AppDispatch) => {
-        const response = await usersRequests.updateUser(id, firstname, lastname);
-        if (response.status === HTTP_CODES.INTERNAL_SERVER_ERROR_500) {
-            const { message }: ErrorMessage = await response.json();
-            dispatch(setErrorMessageAction(message));
-            return;
-        }
-        if (response.status === HTTP_CODES.NO_CONTENT_204) {
-            dispatch(getUserThunk(id));
-            return;
-        }
-    }
-
-
-// types
-
-
-// utils
+}

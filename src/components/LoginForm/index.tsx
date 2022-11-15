@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FormEvent, MouseEvent, TouchEvent, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { selectErrorMessage, signin, signup } from "../../store/authSlice";
+import { selectErrorMessage, AuthThunk } from "../../store/authSlice";
 import styles from "./index.module.scss";
 
 export const LoginForm = () => {
@@ -26,10 +26,10 @@ export const LoginForm = () => {
         const { email, password } = inputText;
         switch (formType) {
             case "signup":
-                dispatch(signup(email, password));
+                dispatch(AuthThunk.signup(email, password));
                 break;
             case "signin":
-                dispatch(signin(email, password));
+                dispatch(AuthThunk.signin(email, password));
                 break;
         }
         setInputText({ email:"", password: ""});

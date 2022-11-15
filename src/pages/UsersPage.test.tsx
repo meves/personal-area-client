@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import MainPage from "./MainPage";
+import MainPage from "./UsersPage";
 
 jest.mock("../components/Navbar.tsx", () => {
     return function() {
