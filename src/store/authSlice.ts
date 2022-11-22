@@ -24,27 +24,27 @@ export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        setIsAuth: (state, action: PayloadAction<boolean>) => {
+        setIsAuthAction: (state, action: PayloadAction<boolean>) => {
             state.isAuth = action.payload
         },
-        setUser: (state, action: PayloadAction<UserFromToken | null>) => {
+        setUserAction: (state, action: PayloadAction<UserFromToken | null>) => {
             state.user = action.payload
         },
-        setErrorMessage: (state, action: PayloadAction<string>) => {
+        setAuthErrorMessageAction: (state, action: PayloadAction<string>) => {
             state.errorMessage = action.payload
         }
     }
 })
 
 // actions
-export const { setIsAuth, setUser, setErrorMessage } = authSlice.actions;
+export const { setIsAuthAction, setUserAction, setAuthErrorMessageAction } = authSlice.actions;
 
 export default authSlice.reducer
 
 // selectors
 export const selectAuth = (state: RootState) => state.auth.isAuth
 export const selectUser = (state: RootState) => state.auth.user
-export const selectErrorMessage = (state: RootState) => state.auth.errorMessage
+export const selectAuthErrorMessage = (state: RootState) => state.auth.errorMessage
 
 // thunks
 export class AuthThunk {
@@ -122,8 +122,8 @@ async function resultSigning(
     message: string,
     dispatch: AppDispatch
 ) {
-    dispatch(setIsAuth(isAuth));
-    dispatch(setUser(user));
-    dispatch(setErrorMessage(message));
+    dispatch(setIsAuthAction(isAuth));
+    dispatch(setUserAction(user));
+    dispatch(setAuthErrorMessageAction(message));
     localStorage.setItem("token", token);
 }

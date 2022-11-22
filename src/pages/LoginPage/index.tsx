@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { LoginForm } from "../components/LoginForm";
+import { LoginForm } from "../../components/LoginForm";
 
 const LoginPageWraper = styled.div`
     background-color: var(--login-page-bg-color);

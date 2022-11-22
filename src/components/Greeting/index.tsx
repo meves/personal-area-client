@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { GreetingThunk, selectError, selectGreeting, setError, setGreeting } from "../../store/greetingSlice";
+import { GreetingThunk, selectGreetingResult, setGreetingResultAction } from "../../store/greetingSlice";
 import styles from "./index.module.scss";
 
 /**
@@ -15,11 +15,8 @@ export const Greeting = () => {
     const [buttonClicked, setButtonClicked] = useState<boolean>(false);
     const buttonText = buttonClicked ? "OK" : "Load greeting";
 
-    // get greeting and error state from redux store
-    const greeting = useAppSelector(selectGreeting);
-    const error = useAppSelector(selectError);
+    const greetingResult = useAppSelector(selectGreetingResult);
 
-    // define dispatch useong hook
     const dispatch = useAppDispatch();
 
     const getGreetingOnClick = async () => {
@@ -31,8 +28,7 @@ export const Greeting = () => {
     useEffect(() => {
         // reset greeting state before unmounting component
         return () => {
-            dispatch(setGreeting(null));
-            dispatch(setError(null));
+            dispatch(setGreetingResultAction({greeting: null, error: null}));
         }
     }, []);
 
@@ -44,10 +40,10 @@ export const Greeting = () => {
             >
                 { buttonText }
             </button>
-            {greeting && 
-                <h1>{ greeting }</h1>
+            {greetingResult.greeting && 
+                <h1>{ greetingResult.greeting }</h1>
             }
-            {error && 
+            {greetingResult.error && 
                 <p role="alert">Oops, failed to fetch</p>
             }
         </div>

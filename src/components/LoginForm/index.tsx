@@ -1,11 +1,11 @@
 import React, { ChangeEvent, FormEvent, MouseEvent, TouchEvent, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { selectErrorMessage, AuthThunk } from "../../store/authSlice";
+import { selectAuthErrorMessage, AuthThunk } from "../../store/authSlice";
 import styles from "./index.module.scss";
 
 export const LoginForm = () => {
     // if error occured while signing, not empty string
-    const errorMessage = useAppSelector(selectErrorMessage);
+    const errorMessage = useAppSelector(selectAuthErrorMessage);
     
     // used to switch register or login form 
     const [formType, setFormType] = useState<"signin" | "signup">("signup")

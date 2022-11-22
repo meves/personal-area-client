@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import { Preloader } from './components/common/Preloader';
 import GreetingPage from './pages/GreetingPage';
+import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import UsersPage from './pages/UsersPage';
 import { AuthThunk, selectAuth } from './store/authSlice';
@@ -31,7 +32,8 @@ function App() {
       <Routes>
         { isAuth ? 
           <>
-          <Route path="/" element={<UsersPage />} />
+          <Route path="/" element={<HomePage/>} />
+          <Route path="/users" element={<UsersPage />} />
           <Route path="/greeting" element={<GreetingPage/>} />
           </>
           :

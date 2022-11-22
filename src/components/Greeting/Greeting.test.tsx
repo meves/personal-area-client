@@ -12,11 +12,10 @@ import * as useHooks from "../../app/hooks";
 jest.mock("../../app/hooks");
 jest.mock("../../store/greetingSlice");
 
-
 const mockUseAppSelector = jest.spyOn(useHooks, "useAppSelector");
 
 afterEach(() => {
-    jest.restoreAllMocks()
+    jest.restoreAllMocks();
 })
 
 describe("render correct UI", () => {    
@@ -24,7 +23,7 @@ describe("render correct UI", () => {
         // ** ARRANGE
         const dispatch = jest.fn();
         jest.spyOn(useHooks, "useAppDispatch").mockReturnValue(dispatch);
-        mockUseAppSelector.mockReturnValue(null);
+        mockUseAppSelector.mockReturnValue({greeting: null, error: null});
         // ** ACT
         const { container } = render(<Greeting/>, {
             container: document.body.appendChild(document.createElement("div"))
@@ -41,7 +40,7 @@ describe("render correct UI", () => {
         // ** ARRANGE
         const dispatch: any = jest.fn(() => true);
         jest.spyOn(useHooks, "useAppDispatch").mockReturnValue(dispatch);
-        mockUseAppSelector.mockReturnValue("Hello");
+        mockUseAppSelector.mockReturnValue({greeting: "Hello", error: null});
         const mockOnClick = jest.fn();
         // ** ACT
         const { container } = render(<Greeting/>, {
@@ -60,13 +59,16 @@ describe("render correct UI", () => {
         const heading = screen.getByRole("heading");
         expect(heading).toBeInTheDocument();
         expect(heading).toHaveTextContent("Hello");
+        // alert
+        const alert = screen.queryByRole("alert");
+        expect(alert).not.toBeInTheDocument();
     })
 
     test("click on button results in an error", async () => {
         // ** ARRANGE
-        mockUseAppSelector.mockReturnValue("Internal server error");
         const dispatch: any = jest.fn(() => false);
         jest.spyOn(useHooks, "useAppDispatch").mockReturnValue(dispatch);
+        mockUseAppSelector.mockReturnValue({greeting: null, error: "Error"});
         const mockOnClick = jest.fn();
         // ** ACT
         const { container } = render(<Greeting/>, {
@@ -81,6 +83,9 @@ describe("render correct UI", () => {
         // button
         expect(mockOnClick).toBeCalledTimes(1);
         expect(button).toHaveTextContent("Load greeting");
+        // heading
+        const heading = screen.queryByRole("heading");
+        expect(heading).not.toBeInTheDocument();
         // alert
         const alert = screen.getByRole("alert");
         expect(alert).toBeInTheDocument();

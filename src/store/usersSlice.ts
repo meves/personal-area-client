@@ -50,6 +50,7 @@ export default usersSlice.reducer;
 
 // selectors
 export const selectUsers = (state: RootState): UserFromList[] => state.users.users;
+export const selectUsersErrorMessage = (state: RootState):string => state.users.errorMessage;
 
 // thunks
 export class UserListThunk {
