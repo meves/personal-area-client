@@ -23,7 +23,7 @@ describe("render correct UI", () => {
         // ** ARRANGE
         const dispatch = jest.fn();
         jest.spyOn(useHooks, "useAppDispatch").mockReturnValue(dispatch);
-        mockUseAppSelector.mockReturnValue({greeting: null, error: null});
+        mockUseAppSelector.mockReturnValue({message: null, error: null});
         // ** ACT
         const { container } = render(<Greeting/>, {
             container: document.body.appendChild(document.createElement("div"))
@@ -40,7 +40,7 @@ describe("render correct UI", () => {
         // ** ARRANGE
         const dispatch: any = jest.fn(() => true);
         jest.spyOn(useHooks, "useAppDispatch").mockReturnValue(dispatch);
-        mockUseAppSelector.mockReturnValue({greeting: "Hello", error: null});
+        mockUseAppSelector.mockReturnValue({message: "Hello", error: null});
         const mockOnClick = jest.fn();
         // ** ACT
         const { container } = render(<Greeting/>, {
@@ -68,7 +68,7 @@ describe("render correct UI", () => {
         // ** ARRANGE
         const dispatch: any = jest.fn(() => false);
         jest.spyOn(useHooks, "useAppDispatch").mockReturnValue(dispatch);
-        mockUseAppSelector.mockReturnValue({greeting: null, error: "Error"});
+        mockUseAppSelector.mockReturnValue({message: null, error: "Error"});
         const mockOnClick = jest.fn();
         // ** ACT
         const { container } = render(<Greeting/>, {

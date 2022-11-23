@@ -21,7 +21,7 @@ const initialState = {
         },
     greeting: {
         greetingResult: {
-            greeting: null,
+            message: null,
             error: null
         }
     },
@@ -146,27 +146,27 @@ describe("greetingSlice", () => {
     test("should set greetingResult using setGreetingResultAction", () => {
         // null null
         const greetingResultNull: GreetingResult = {
-            greeting: null, error: null
+            message: null, error: null
         }
         let result: GreetingState = greetingReducer(initialState.greeting, { 
             type: setGreetingResultAction.type, payload: greetingResultNull });
-        expect(result.greetingResult.greeting).toBe(null);
+        expect(result.greetingResult.message).toBe(null);
         expect(result.greetingResult.error).toBe(null);
         // string null
         const greetingSuccess = {
-            greeting: "Hello", error: null
+            message: "Hello", error: null
         }
         result = greetingReducer(initialState.greeting, { 
             type: setGreetingResultAction.type, payload: greetingSuccess });
-        expect(result.greetingResult.greeting).toBe("Hello");
+        expect(result.greetingResult.message).toBe("Hello");
         expect(result.greetingResult.error).toBe(null);
         // null string
         const greetingError = {
-            greeting: null, error: "Error"
+            message: null, error: "Error"
         }
         result = greetingReducer(initialState.greeting, { 
             type: setGreetingResultAction.type, payload: greetingError });
-        expect(result.greetingResult.greeting).toBe(null);
+        expect(result.greetingResult.message).toBe(null);
         expect(result.greetingResult.error).toBe("Error");
     })
 })

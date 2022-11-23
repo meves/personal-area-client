@@ -28,7 +28,7 @@ export const Greeting = () => {
     useEffect(() => {
         // reset greeting state before unmounting component
         return () => {
-            dispatch(setGreetingResultAction({greeting: null, error: null}));
+            dispatch(setGreetingResultAction({message: null, error: null}));
         }
     }, []);
 
@@ -40,10 +40,10 @@ export const Greeting = () => {
             >
                 { buttonText }
             </button>
-            {greetingResult.greeting && 
-                <h1>{ greetingResult.greeting }</h1>
+            {!!greetingResult.message && 
+                <h1>{ greetingResult.message }</h1>
             }
-            {greetingResult.error && 
+            {!!greetingResult.error && 
                 <p role="alert">Oops, failed to fetch</p>
             }
         </div>

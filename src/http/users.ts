@@ -1,6 +1,7 @@
 import { baseUrl } from ".";
 
 export class UsersRequests {
+    
     static async getAllUsers() {
         return await fetch(`${baseUrl}users`, {
             method: "GET"

@@ -17,7 +17,7 @@ const state: RootState = {
     },
     greeting: {
         greetingResult: {
-            greeting: null as string | null,
+            message: null as string | null,
             error: null as Error | null
     }}
 }
@@ -27,11 +27,11 @@ describe("greeting selectors", () => {
         let result: GreetingResult = selectGreetingResult(state);
         expect(result).toEqual(state.greeting.greetingResult);
         
-        state.greeting.greetingResult = { greeting: "Hello", error: null };
+        state.greeting.greetingResult = { message: "Hello", error: null };
         result = selectGreetingResult(state);
         expect(result).toEqual(state.greeting.greetingResult);
 
-        state.greeting.greetingResult = { greeting: null, error: Error("Error") };
+        state.greeting.greetingResult = { message: null, error: Error("Error") };
         result = selectGreetingResult(state);
         expect(result).toEqual(state.greeting.greetingResult);
     })
