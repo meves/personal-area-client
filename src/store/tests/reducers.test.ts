@@ -3,10 +3,10 @@ import authReducer, {
 } from "../authSlice";
 import usersReducer, {
     setUsersAction, addCreatedUserAction, deleteSelectedUserAction,
-    updateSeletedUserAction, setErrorMessageAction, UsersState
+    updateSeletedUserAction, setErrorMessageAction, UsersState, setErrorAction
 } from "../usersSlice";
 import greetingReducer, { setGreetingResultAction, GreetingState, GreetingResult } from "../greetingSlice";
-import { UserFromList } from "../types";
+import { UserFromList } from "../../types";
 
 // initial state for start tests
 const initialState = {
@@ -17,7 +17,8 @@ const initialState = {
         },
     users: {
             users: [] as UserFromList[],
-            errorMessage: ""
+            errorMessage: "",
+            error: null as any
         },
     greeting: {
         greetingResult: {
@@ -79,6 +80,7 @@ describe("usersSlice", () => {
         expect(result.users[1]).toEqual(users[1]);
         expect(result.users[2]).toEqual(users[2]);
         expect(result.errorMessage).toBe("");
+        expect(result.error).toBe(null);
     })
     test("should set created user using addCreatedUserAction", () => {
         initialState.users.users = [
@@ -96,6 +98,7 @@ describe("usersSlice", () => {
         expect(result.users[2]).toEqual(initialState.users.users[2]);
         expect(result.users[3]).toEqual(newUsers[0]);
         expect(result.errorMessage).toBe("");
+        expect(result.error).toBe(null);
     })
     test("should delete user using deleteSelectedUserAction", () => {
         initialState.users.users = [
@@ -109,6 +112,7 @@ describe("usersSlice", () => {
         expect(result.users).toContain(initialState.users.users[1]);
         expect(result.users).not.toContain(initialState.users.users[2]);
         expect(result.errorMessage).toBe("");
+        expect(result.error).toBe(null);
     })
     test("should update user using updateSeletedUserAction", () => {
         initialState.users.users = [
@@ -126,6 +130,7 @@ describe("usersSlice", () => {
             id: 3, firstname: "Yury", lastname: "Kuznetsov", createdAt: "", updatedAt: "" 
         });
         expect(result.errorMessage).toBe("");
+        expect(result.error).toBe(null);
     })
     test("set errorMessage using setErrorMessageAction", () => {
         initialState.users.users = [];
@@ -134,7 +139,18 @@ describe("usersSlice", () => {
         const result: UsersState = usersReducer(initialState.users, action);
         expect(result.errorMessage).toBe(errorMessage);
         expect(result.users).toEqual([]);
+        expect(result.error).toBe(null);
     })
+    test("set error using setErrorAction", () => {
+        initialState.users.users = [];
+        initialState.users.errorMessage = "";
+        const error = new Error
+        const action = { type: setErrorAction.type, payload: error }
+        const result: UsersState = usersReducer(initialState.users, action);
+        expect(result.users).toEqual([]);
+        expect(result.errorMessage).toBe("");
+        expect(result.error).toEqual(error);
+;    })
 })
 
 // greetingSlice

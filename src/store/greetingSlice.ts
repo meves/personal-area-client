@@ -1,6 +1,7 @@
 import { GreetingRequests } from './../http/greeting';
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AppDispatch, RootState } from ".";
+import { GreetingData } from '../types';
 
 
 export interface GreetingState {
@@ -41,7 +42,7 @@ export class GreetingThunk {
     static getGreetingThunk = (id: number) => 
         
         async (dispatch: AppDispatch) => {
-            const data = await GreetingRequests.getGreeting(id);
+            const data: GreetingData = await GreetingRequests.getGreeting(id);
             dispatch(setGreetingResultAction({ 
                 message: data.greeting?.message, 
                 error: data.error 

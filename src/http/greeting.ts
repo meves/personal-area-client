@@ -1,5 +1,6 @@
 import { baseUrl } from "."
-import { GreetingData } from "../store/types";
+import { GreetingData } from "../types";
+import { HTTP_CODES } from "./codes";
 
 // class responsible for requests to /api/greeting
 export class GreetingRequests {
@@ -9,6 +10,9 @@ export class GreetingRequests {
             method: "GET"
         })
         const data: GreetingData = await response.json();
+        if (response.status === HTTP_CODES.OK_200) {
+            data.code = "Success"
+        }
         return data;
     } 
 }

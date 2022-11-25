@@ -3,7 +3,7 @@ import { AppDispatch, RootState } from "."
 import { AuthRequests } from "../http/auth"
 import { HTTP_CODES } from "../http/codes"
 import jwt_decode from "jwt-decode";
-import { ErrorMessage, AuthToken } from "./types";
+import { ErrorMessage, AuthToken, AuthData } from "../types";
 
 
 // initialState type
@@ -48,63 +48,46 @@ export const selectAuthErrorMessage = (state: RootState) => state.auth.errorMess
 
 // thunks
 export class AuthThunk {
-    static auth = () => async (dispatch: AppDispatch) => {
-        const token: string | null = localStorage.getItem("token");
-        const response = await AuthRequests.auth(token);
-        if (response.status === HTTP_CODES.UNAUTHORIZED_401) {
-            const { message }: ErrorMessage = await response.json();
-            await resultSigning(false, "", null, message, dispatch);
-            return;
+
+    static auth = () => 
+        async (dispatch: AppDispatch) => {
+            const token: string | null = localStorage.getItem("token");
+            const data: AuthData = await AuthRequests.auth(token);
+            if (data.code === "Success") {
+                const user: UserFromToken = jwt_decode(data.token as string);
+                await resultSigning(true, data.token, user, data.message, dispatch);
+            } else {
+                await resultSigning(false, data.token, null, data.message, dispatch);
+            }
         }
-        if (response.status === HTTP_CODES.OK_200) {
-            const { token }: AuthToken = await response.json();
-            const user: UserFromToken = jwt_decode(token);
-            await resultSigning(true, token, user, "", dispatch);
-            return;
+
+    static signup = (email: string, password: string) => 
+        async (dispatch: AppDispatch) => {
+            const data: AuthData = await AuthRequests.signup(email, password);
+            if (data.code === "Success") {
+                const user: UserFromToken = jwt_decode(data.token);
+                await resultSigning(true, data.token, user, data.message, dispatch);
+            } else {
+                await resultSigning(false, data.token, null, data.message, dispatch);
+            }
         }
-    }    
-    static signup = (email: string, password: string) => async (dispatch: AppDispatch) => {
-        const response = await AuthRequests.signup(email, password);
-        if (response.status === HTTP_CODES.BAD_REQUEST_400) {
-            const { message }: ErrorMessage = await response.json();
-            await resultSigning(false, "", null, message, dispatch);
-            return;
+
+    static signin = (email: string, password: string) => 
+        async (dispatch: AppDispatch) => {
+            const data: AuthData = await AuthRequests.signin(email, password);
+            if (data.code === "Success") {
+                const user: UserFromToken = jwt_decode(data.token);
+                await resultSigning(true, data.token, user, data.message, dispatch);
+            } else {
+                await resultSigning(false, data.token, null, data.message, dispatch);
+            }
         }
-        if (response.status === HTTP_CODES.CONFLICT_409) {
-            const { message } = await response.json();
-            await resultSigning(false, "", null, message, dispatch);
-            return;
-        }
-        if (response.status === HTTP_CODES.CREATED_201) {
-            const { token }: AuthToken = await response.json();
-            const user: UserFromToken = jwt_decode(token);
-            await resultSigning(true, token, user, "", dispatch);
-            return;
-        }
-    }    
-    static signin = (email: string, password: string) => async (dispatch: AppDispatch) => {
-        const response = await AuthRequests.signin(email, password);
-        if (response.status === HTTP_CODES.BAD_REQUEST_400) {
-            const { message } = await response.json();
-            await resultSigning(false, "", null, message, dispatch);
-            return;
-        }
-        if (response.status === HTTP_CODES.INTERNAL_SERVER_ERROR_500) {
-            const { message } = await response.json();
-            await resultSigning(false, "", null, message, dispatch);
-            return;
-        }
-        if (response.status === HTTP_CODES.OK_200) {
-            const { token } = await response.json();
-            const user: UserFromToken = jwt_decode(token);
-            await resultSigning(true, token, user, "", dispatch);
-            return;
-        }
-    }    
-    static logout = () => async (dispatch: AppDispatch) => {
-        localStorage.removeItem("token");
-        dispatch(AuthThunk.auth());
-    }
+
+    static logout = () => 
+        async (dispatch: AppDispatch) => {
+            localStorage.removeItem("token");
+            dispatch(AuthThunk.auth());
+        }    
 }
 
 // types

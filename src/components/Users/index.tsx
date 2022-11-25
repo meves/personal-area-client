@@ -22,7 +22,7 @@ export const Users = () => {
     
     /** state for filtering users list */
     const [userSearchData, setUserSearchData] = useState<UserSearchData>({ firstname: "", lastname: "" });
-
+    
     return (
         <div className={styles.usersContainer}>
             <h2>User List application</h2>
@@ -31,7 +31,6 @@ export const Users = () => {
             >Search user by name
             </h4>
             <SearchUserForm 
-                userSearchData={userSearchData} 
                 setUserSearchData={setUserSearchData} 
             />
             <h4 
@@ -47,8 +46,8 @@ export const Users = () => {
             >User list
             </h4>
             <UserList 
-                setUserData={setUserData} 
                 userSearchData={userSearchData} 
+                setUserData={setUserData}
             />
         </div>
     )
@@ -56,10 +55,8 @@ export const Users = () => {
 
 // SearchUserForm ---------------------------------------------------------------------------------
 const SearchUserForm = ({
-    userSearchData,
     setUserSearchData
 } : {
-    userSearchData: UserSearchData
     setUserSearchData: React.Dispatch<React.SetStateAction<UserSearchData>>
 }) => {
     /** local state for controlled fields */
@@ -74,6 +71,13 @@ const SearchUserForm = ({
         event.preventDefault();
         setUserSearchData(inputUserSearchData);
         setInputUserSearchData({ firstname: "", lastname: "" });
+    }
+
+    const resetUserSearchData = () => {
+        setInputUserSearchData({ firstname: "", lastname: "" });
+        if (inputUserSearchData.firstname === "" && inputUserSearchData.lastname === "") {
+            setUserSearchData(inputUserSearchData);
+        }
     }
 
     return (
@@ -101,6 +105,12 @@ const SearchUserForm = ({
                 className={styles.button}
                 type="submit"
             >Search
+            </button>
+            <button
+                className={`${styles.button} ${styles.cancel}`}
+                type="reset"
+                onClick={resetUserSearchData}
+            >Reset
             </button>
         </form>
     )
@@ -184,22 +194,35 @@ const UserList = ({
     setUserData: React.Dispatch<React.SetStateAction<InputUserData>>
 }) => {
     const users = useAppSelector(selectUsers);
-    
+            
     const dispatch = useAppDispatch();
-    /** get all users when page loaded or users changed */
+
+    // Invokes effect to get all users while page loaded or userSearchData coming in
     useEffect(() => {
         dispatch(UserListThunk.getUsersThunk());
-    }, [dispatch])
+    }, [dispatch, userSearchData])
+
     // delete chosen user by id
     const handleDeleteUsers = (event: MouseEvent | TouchEvent, id: number) => {
         dispatch(UserListThunk.deleteUserThunk(id));
     }
-    /** send user data toLowerCase() Users toLowerCase() local state */
+
+    // send user data toLowerCase() Users toLowerCase() local state
     const sendUserDataToLocalState = (id: number, firstname: string, lastname: string) => {
         setUserData({id, firstname, lastname});
     }
 
+    const updateUserListOnClick = () => {
+        dispatch(UserListThunk.getUsersThunk());
+    }
+
     return (
+        <div>
+        <button
+            onClick={updateUserListOnClick}
+            className={styles.button}
+            style={{border: "2px solid violet"}}
+        >Update users</button>
         <ul className={`flexDirectionColumn ${styles.list}`}>
             {users
             .filter(user => {                
@@ -226,13 +249,14 @@ const UserList = ({
                     <button
                         className={styles.button}
                         onClick={() => sendUserDataToLocalState(user.id, user.firstname, user.lastname)}
-                    >edit</button>
+                        >edit</button>
                     <button
                         className={styles.button}
                         onClick={(event) => handleDeleteUsers(event, user.id)}
-                    >delete</button>
+                        >delete</button>
                 </li>
             ))}
         </ul>
+        </div>
     )
 }

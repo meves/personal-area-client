@@ -1,4 +1,6 @@
 import { baseUrl } from ".";
+import { AuthData } from "../types";
+import { HTTP_CODES } from "./codes";
 
 export class AuthRequests {
     // /api/auth
@@ -9,7 +11,11 @@ export class AuthRequests {
                 "Authorization": `Bearer ${token}`
             }
         });
-        return response;
+        const data: AuthData = await response.json();
+        if (response.status === HTTP_CODES.OK_200) {
+            data.code = "Success";
+        }
+        return data;
     }
     // /api/signup
     static async signup(email: string, password: string) {
@@ -18,7 +24,11 @@ export class AuthRequests {
             headers: { "Content-type": "application/json" },
             body: JSON.stringify({ email, password })
         });
-        return response;
+        const data: AuthData = await response.json();
+        if (response.status === HTTP_CODES.CREATED_201) {
+            data.code = "Success";
+        } 
+        return data;
     }
     // /api/signin
     static async signin(email: string, password: string) {
@@ -27,6 +37,10 @@ export class AuthRequests {
             headers: { "Content-type": "application/json" },
             body: JSON.stringify({email, password})
         });
-        return response;
+        const data: AuthData = await response.json();
+        if (response.status === HTTP_CODES.OK_200) {
+            data.code = "Success";
+        }
+        return data;
     }
 }

@@ -3,7 +3,7 @@ import { selectGreetingResult } from "../greetingSlice";
 import { GreetingResult } from "../greetingSlice";
 import { selectAuth, selectUser, selectAuthErrorMessage, UserFromToken } from "../authSlice";
 import { selectUsers, selectUsersErrorMessage } from "../usersSlice";
-import { UserFromList } from "../types";
+import { UserFromList } from "../../types";
 
 const state: RootState = {
     auth: {
@@ -13,12 +13,13 @@ const state: RootState = {
     },
     users: {
         users: [] as UserFromList[],
-        errorMessage: ""
+        errorMessage: "",
+        error: null as any
     },
     greeting: {
         greetingResult: {
-            message: null as string | null,
-            error: null as Error | null
+        message: null as string | null,
+        error: null as Error | null
     }}
 }
 
