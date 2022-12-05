@@ -10,7 +10,6 @@ export interface GreetingState {
         error: Error | null
     }
 }
-
 const initialState: GreetingState = {
     greetingResult: {
         message: null,
@@ -18,6 +17,7 @@ const initialState: GreetingState = {
     }
 }
 export type GreetingResult = typeof initialState.greetingResult;
+
 
 export const greetingSlice = createSlice({
     name: "greeting",
@@ -29,14 +29,16 @@ export const greetingSlice = createSlice({
     }
 });
 
+
 export const { setGreetingResultAction } = greetingSlice.actions;
+
 
 export default greetingSlice.reducer;
 
-// selectors
+
 export const selectGreetingResult = (state: RootState) => state.greeting.greetingResult;
 
-// thunks
+
 export class GreetingThunk {
 
     static getGreetingThunk = (id: number) => 

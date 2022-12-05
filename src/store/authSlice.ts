@@ -1,25 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AppDispatch, RootState } from "."
 import { AuthRequests } from "../http/auth"
-import { HTTP_CODES } from "../http/codes"
 import jwt_decode from "jwt-decode";
-import { ErrorMessage, AuthToken, AuthData } from "../types";
+import { AuthData } from "../types";
 
 
-// initialState type
 export interface AuthState {
     isAuth: boolean
     user: UserFromToken | null
     errorMessage: string
 }
-// initialState object
 const initialState: AuthState = {
     isAuth: false,
     user: null,
     errorMessage: ""
 }
 
-// slise with reducers
+
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -36,17 +33,17 @@ export const authSlice = createSlice({
     }
 })
 
-// actions
 export const { setIsAuthAction, setUserAction, setAuthErrorMessageAction } = authSlice.actions;
+
 
 export default authSlice.reducer
 
-// selectors
+
 export const selectAuth = (state: RootState) => state.auth.isAuth
 export const selectUser = (state: RootState) => state.auth.user
 export const selectAuthErrorMessage = (state: RootState) => state.auth.errorMessage
 
-// thunks
+
 export class AuthThunk {
 
     static auth = () => 
@@ -90,14 +87,14 @@ export class AuthThunk {
         }    
 }
 
-// types
+
 export type UserFromToken = {
     id: number
     email: string
     role: string
 }
 
-// utils
+
 async function resultSigning(
     isAuth: boolean,
     token: string,

@@ -1,6 +1,19 @@
-import React, { FC } from "react";
+import React from "react";
 import { v4 as uuidv4 } from "uuid";
 import styled from "styled-components";
+
+
+export const Preloader = React.memo(() => {
+    const circles = Array.from(new Array(5));
+    return (
+        <div>
+            {circles.map(() => ( 
+                <Circle key={uuidv4()}/> )
+            )}
+        </div>
+    )
+})
+
 
 const Circle = styled.span`
     display:  inline-block;
@@ -48,12 +61,3 @@ const Circle = styled.span`
         }
     }
 `;
-
-export const Preloader: FC = React.memo(() => {
-    const circles = Array.from(new Array<number>(5));
-    return (
-        <div>
-            {circles.map(() => ( <Circle key={uuidv4()}></Circle> ))}
-        </div>
-    )
-})

@@ -5,7 +5,7 @@ import userEvent from "@testing-library/user-event";
 // custom jest matcher from jest-dom
 import "@testing-library/jest-dom";
 // Component
-import { Greeting } from ".";
+import { Greeting } from "../Greeting";
 // import hooks to mock
 import * as useHooks from "../../app/hooks";
 

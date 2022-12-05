@@ -1,262 +1,57 @@
-import React, { ChangeEvent, FormEvent, MouseEvent, TouchEvent, useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { UserListThunk, selectUsers } from '../../store/usersSlice';
-import styles from './index.module.scss';
+import React, { useState } from 'react';
+import { SearchUserForm, UserForm } from './UsersForms';
+import { InputUserData, UserSearchData } from './types';
+import { UserList } from './UserList';
+import styled from 'styled-components';
 
-type InputUserData = {
-    id: number | null;
-    firstname: string;
-    lastname: string;
+
+const initialInputUserData: InputUserData = {
+    id: null,
+    firstname: "",
+    lastname: ""
 }
 
-type UserSearchData = {
-    firstname: string
-    lastname: string
+const initialUserSearchData: UserSearchData = {
+    firstname: "",
+    lastname: ""
 }
 
-// Users ---------------------------------------------------------------------------------
 export const Users = () => {
-    
-    /** state for controlled inputs in UserForm */
-    const [userData, setUserData] = useState<InputUserData>({ id: null, firstname: "", lastname: "" });
-    
-    /** state for filtering users list */
-    const [userSearchData, setUserSearchData] = useState<UserSearchData>({ firstname: "", lastname: "" });
+    const [inputUserData, setInputUserData] = useState(initialInputUserData);
+    const [userSearchData, setUserSearchData] = useState(initialUserSearchData);
     
     return (
-        <div className={styles.usersContainer}>
+        <UsersStyled>
             <h2>User List application</h2>
-            <h4 
-                className={styles.formTitle}
-            >Search user by name
-            </h4>
+            
+            <Heading4>Search user by name</Heading4>
             <SearchUserForm 
                 setUserSearchData={setUserSearchData} 
             />
-            <h4 
-                className={styles.formTitle}
-            >Add or update user
-            </h4>
-            <UserForm 
-                userData={userData} 
-                setUserData={setUserData} 
-            />
-            <h4 
-                className={styles.formTitle}
-            >User list
-            </h4>
-            <UserList 
-                userSearchData={userSearchData} 
-                setUserData={setUserData}
-            />
-        </div>
-    )
-}
-
-// SearchUserForm ---------------------------------------------------------------------------------
-const SearchUserForm = ({
-    setUserSearchData
-} : {
-    setUserSearchData: React.Dispatch<React.SetStateAction<UserSearchData>>
-}) => {
-    /** local state for controlled fields */
-    const [inputUserSearchData, setInputUserSearchData] = useState<UserSearchData>({ firstname: "", lastname: "" });
-    /** handler for controlled fields */
-    const handleChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
-        const input = event.currentTarget;
-        setInputUserSearchData((prevUserSearchData) => ({ ...prevUserSearchData, [input.name]: input.value }));
-    }
-    /** pass user search data toLowerCase() parent component toLowerCase() filter them */
-    const passUserSearchData = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setUserSearchData(inputUserSearchData);
-        setInputUserSearchData({ firstname: "", lastname: "" });
-    }
-
-    const resetUserSearchData = () => {
-        setInputUserSearchData({ firstname: "", lastname: "" });
-        if (inputUserSearchData.firstname === "" && inputUserSearchData.lastname === "") {
-            setUserSearchData(inputUserSearchData);
-        }
-    }
-
-    return (
-        <form 
-            className={styles.form} 
-            onSubmit={passUserSearchData}
-        >
-            <input
-                className={styles.input}
-                value={inputUserSearchData.firstname}
-                onChange={handleChangeInput}
-                type="text" 
-                name="firstname" 
-                placeholder="first name" 
-            />
-            <input 
-                className={styles.input}
-                value={inputUserSearchData.lastname}
-                onChange={handleChangeInput}
-                type="text" 
-                name="lastname" 
-                placeholder="last name" 
-            />
-            <button 
-                className={styles.button}
-                type="submit"
-            >Search
-            </button>
-            <button
-                className={`${styles.button} ${styles.cancel}`}
-                type="reset"
-                onClick={resetUserSearchData}
-            >Reset
-            </button>
-        </form>
-    )
-}
-
-// UserForm ---------------------------------------------------------------------------------
-const UserForm = ({
-    userData,
-    setUserData
-} : {
-    userData: InputUserData
-    setUserData: React.Dispatch<React.SetStateAction<InputUserData>>
-}) => {
-    
-    /** handler of user input */
-    const handleInputOfUserName = (event: ChangeEvent<HTMLInputElement>) => {
-        const input = event.currentTarget;
-        setUserData((prevUser) => ({ ...prevUser, [input.name]: input.value }));
-    }
-
-    const dispatch = useAppDispatch();
-    
-    /** handler of form sending */
-    const handleSendOfForm = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        if (userData.id !== null) {
-            dispatch(UserListThunk.updateUserThunk(userData.id, userData.firstname, userData.lastname));
-        } else {
-            dispatch(UserListThunk.createUserThunk(userData.firstname, userData.lastname));
-        }
-        cancelUpdateSelectedUser();
-    }
-
-    /** cancel updating user */
-    const cancelUpdateSelectedUser = () => {
-        setUserData({ id: null, firstname: "", lastname: "" });
-    }
-
-    return (
-        <form 
-            className={styles.form} 
-            onSubmit={handleSendOfForm}
-        >
-            <input 
-                className={styles.input}
-                value={userData.firstname}
-                onChange={handleInputOfUserName}
-                type="text" 
-                name="firstname" 
-                placeholder="first name"
-            />
-            <input 
-                className={styles.input}
-                value={userData.lastname}
-                onChange={handleInputOfUserName}
-                type="text" 
-                name="lastname" 
-                placeholder="last name" 
-            />
-            <button
-                className={styles.button}
-                type="submit"
-            >Send
-            </button>
-            {userData.id !== null &&
-                <button
-                    className={`${styles.cancel} ${styles.button}`}
-                    onClick={cancelUpdateSelectedUser}
-                >Cancel</button>
-            }
-        </form>
-    )
-}
-
-// UserList ---------------------------------------------------------------------------------
-const UserList = ({
-    userSearchData,
-    setUserData
-} : {
-    userSearchData: UserSearchData
-    setUserData: React.Dispatch<React.SetStateAction<InputUserData>>
-}) => {
-    const users = useAppSelector(selectUsers);
             
-    const dispatch = useAppDispatch();
+            <Heading4>Add or update user</Heading4>
+            <UserForm 
+                userData={inputUserData} 
+                setUserData={setInputUserData} 
+            />
 
-    // Invokes effect to get all users while page loaded or userSearchData coming in
-    useEffect(() => {
-        dispatch(UserListThunk.getUsersThunk());
-    }, [dispatch, userSearchData])
-
-    // delete chosen user by id
-    const handleDeleteUsers = (event: MouseEvent | TouchEvent, id: number) => {
-        dispatch(UserListThunk.deleteUserThunk(id));
-    }
-
-    // send user data toLowerCase() Users toLowerCase() local state
-    const sendUserDataToLocalState = (id: number, firstname: string, lastname: string) => {
-        setUserData({id, firstname, lastname});
-    }
-
-    const updateUserListOnClick = () => {
-        dispatch(UserListThunk.getUsersThunk());
-    }
-
-    return (
-        <div>
-        <button
-            onClick={updateUserListOnClick}
-            className={styles.button}
-            style={{border: "2px solid violet"}}
-        >Update users</button>
-        <ul className={`flexDirectionColumn ${styles.list}`}>
-            {users
-            .filter(user => {                
-                return (userSearchData.firstname === "" || 
-                    user.firstname.toLowerCase().includes(userSearchData.firstname.toLowerCase())
-                ) &&
-                (userSearchData.lastname === "" || 
-                    user.lastname.toLowerCase().includes(userSearchData.lastname.toLowerCase())
-                )             
-            })
-            .map((user) => (
-                <li 
-                    className={styles.item}
-                    key={user.id}
-                >
-                    <span
-                        className={styles.name}    
-                    >{user.firstname}
-                    </span> 
-                    <span
-                        className={styles.name}
-                    >{user.lastname}
-                    </span>
-                    <button
-                        className={styles.button}
-                        onClick={() => sendUserDataToLocalState(user.id, user.firstname, user.lastname)}
-                        >edit</button>
-                    <button
-                        className={styles.button}
-                        onClick={(event) => handleDeleteUsers(event, user.id)}
-                        >delete</button>
-                </li>
-            ))}
-        </ul>
-        </div>
+            <Heading4>User list</Heading4>            
+            <UserList
+                userSearchData={userSearchData} 
+                setInputUserData={setInputUserData}
+            />
+        </UsersStyled>
     )
 }
+
+
+// styles
+const UsersStyled = styled.div`
+    padding: 1em;
+`;
+
+const Heading4 = styled.h4`
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+
+`;

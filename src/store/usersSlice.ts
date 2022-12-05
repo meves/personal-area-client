@@ -1,22 +1,21 @@
 import { UsersRequests } from './../http/users';
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { AppDispatch, RootState } from "."
-import { HTTP_CODES } from '../http/codes';
-import { ErrorMessage, DataWithUsers, UserFromList, UsersData } from '../types';
+import { UserFromList, UsersData } from '../types';
+
 
 export interface UsersState {
     users: UserFromList[]
     errorMessage: string
     error: any
 }
-// initial state
 const initialState: UsersState = {
     users: [],
     errorMessage: "",
     error: null
 }
 
-// users slice
+
 export const usersSlice = createSlice({
     name: "users",
     initialState,
@@ -47,19 +46,20 @@ export const usersSlice = createSlice({
     }
 });
 
-// actions
+
 export const { setUsersAction, setErrorMessageAction, addCreatedUserAction, 
     deleteSelectedUserAction, updateSeletedUserAction, setErrorAction } 
 = usersSlice.actions;
 
+
 export default usersSlice.reducer;
 
-// selectors
+
 export const selectUsers = (state: RootState): UserFromList[] => state.users.users;
 export const selectUsersErrorMessage = (state: RootState):string => state.users.errorMessage;
 export const selectUsersError = (state: RootState) => state.users.error;
 
-// thunks
+
 export class UserListThunk {
 
     static getUsersThunk = () => 
