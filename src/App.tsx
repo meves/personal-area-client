@@ -28,7 +28,6 @@ function App() {
   if (loading) return <Preloader/>
   
   return (
-    <div>
       <Routes>
         { isAuth ? 
           <>
@@ -41,7 +40,6 @@ function App() {
         }
         <Route path="*" element={<div>Not found</div>} />
       </Routes>
-    </div>
   );
 }
 

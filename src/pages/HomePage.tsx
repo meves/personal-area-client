@@ -4,11 +4,9 @@ import { Home } from "../components/Home";
 
 const HomePage = () => {
     return (
-        <div className="container">
-            <Layout>
-                <Home/>
-            </Layout>
-        </div>
+        <Layout>
+            <Home/>
+        </Layout>
     ) 
 }
 

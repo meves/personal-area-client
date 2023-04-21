@@ -5,6 +5,7 @@ import styled from "styled-components";
 
 export const Preloader = React.memo(() => {
     const circles = Array.from(new Array(5));
+    
     return (
         <div>
             {circles.map(() => ( 

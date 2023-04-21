@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { GreetingThunk, selectGreetingResult, setGreetingResultAction } from "../store/greetingSlice";
 import styled from "styled-components";
@@ -16,17 +16,17 @@ export const Greeting = () => {
     const greetingResult = useAppSelector(selectGreetingResult);
     const [buttonClicked, setButtonClicked] = useState<boolean>(false);
     
-    const getGreetingOnClick = async () => {
+    const getGreetingOnClick = useCallback(async () => {
         const firstRecordId = 1;
         const result = await dispatch(GreetingThunk.getGreetingThunk(firstRecordId));
-        await setButtonClicked(result as boolean);
-    }
+        setButtonClicked(result as boolean);
+    }, [dispatch])
 
     useEffect(() => {
         return () => {
             dispatch(setGreetingResultAction({message: null, error: null}));
         }
-    }, []);
+    }, [dispatch]);
 
     return (
         <GreetingComponent>

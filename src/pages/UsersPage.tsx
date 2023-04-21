@@ -4,11 +4,9 @@ import { Users } from "../components/Users";
 
 const UsersPage = () => {
     return (
-        <div className="container">
-            <Layout>
-                <Users/>
-            </Layout>
-        </div>
+        <Layout>
+            <Users/>
+        </Layout>
     );
 }
 

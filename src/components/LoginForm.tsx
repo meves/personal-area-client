@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, MouseEvent, TouchEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, MouseEvent, TouchEvent, useCallback, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { selectAuthErrorMessage, AuthThunk } from "../store/authSlice";
 import styled from "styled-components";
@@ -10,15 +10,15 @@ export const LoginForm = () => {
     const [formType, setFormType] = useState<"signin" | "signup">("signin")
     
     const [inputText, setInputText] = useState({ email: "", password: "" });
-    const changeInputText = (event: ChangeEvent<HTMLInputElement>) => {
+    const changeInputText = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         const name = event.currentTarget.name;
         const value = event.currentTarget.value;
         setInputText((prevInputText) => ({...prevInputText, [name]: value}));
-    }
+    }, [])
     
     const dispatch = useAppDispatch();
 
-    const submitForm = (event: FormEvent<HTMLInputElement>) => {
+    const submitForm = useCallback((event: FormEvent<HTMLInputElement>) => {
         event.preventDefault();
         const { email, password } = inputText;
         switch (formType) {
@@ -30,14 +30,14 @@ export const LoginForm = () => {
                 break;
         }
         setInputText({ email:"", password: ""});
-    }
+    }, [dispatch, formType, inputText])
 
-    const toggleFormType = (event: TouchEvent | MouseEvent) => {
+    const toggleFormType = useCallback((event: TouchEvent | MouseEvent) => {
         event.preventDefault()
         setFormType((prev) => 
             prev === "signup" ? "signin" : "signup"
         )
-    }
+    }, [])
 
     return (
         <div className='centeredContainer flexDirectionColumn'>

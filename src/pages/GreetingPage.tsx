@@ -4,11 +4,9 @@ import { Layout } from "../components/common/Layout";
 
 const GreetingPage = () => {
     return (
-        <div className="container">
-            <Layout>
-                <Greeting/>
-            </Layout>
-        </div>
+        <Layout>
+            <Greeting/>
+        </Layout>
     )
 }
 
